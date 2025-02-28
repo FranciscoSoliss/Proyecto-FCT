@@ -1,0 +1,48 @@
+
+CREATE DATABASE IF NOT EXISTS GestionEventosSostenibles;
+USE GestionEventosSostenibles;
+
+CREATE TABLE Usuario (
+    ID_Usuario INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Correo VARCHAR(100) UNIQUE NOT NULL,
+    Contraseña VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Categoria (
+    ID_Categoria INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Ubicacion (
+    ID_Ubicacion INT AUTO_INCREMENT PRIMARY KEY,
+    Tipo VARCHAR(50) NOT NULL CHECK (Tipo IN ('Online', 'Presencial')),
+    Direccion VARCHAR(255) NULL
+);
+
+CREATE TABLE Organizador (
+    ID_Organizador INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Contacto VARCHAR(150) NOT NULL
+);
+
+CREATE TABLE Evento (
+    ID_Evento INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(150) NOT NULL,
+    Fecha DATE NOT NULL,
+    Duracion INT NULL,
+    ID_Ubicacion INT NOT NULL,
+    ID_Categoria INT NOT NULL,
+    ID_Organizador INT NOT NULL,
+    FOREIGN KEY (ID_Ubicacion) REFERENCES Ubicacion(ID_Ubicacion) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (ID_Categoria) REFERENCES Categoria(ID_Categoria) ON DELETE NO ACTION ON UPDATE CASCADE,
+    FOREIGN KEY (ID_Organizador) REFERENCES Organizador(ID_Organizador) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Inscripcion (
+    ID_Inscripcion INT AUTO_INCREMENT PRIMARY KEY,
+    ID_Usuario INT NOT NULL,
+    ID_Evento INT NOT NULL,
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (ID_Evento) REFERENCES Evento(ID_Evento) ON DELETE CASCADE ON UPDATE CASCADE
+);
